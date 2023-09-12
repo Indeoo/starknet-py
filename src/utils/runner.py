@@ -321,11 +321,13 @@ async def process_k10_liq_remove(private_key: str) -> None:
 
 async def process_zklend_liq(private_key: str) -> None:
     token = ZKLendLiqConfig.token
-    amount = random.uniform(ZKLendLiqConfig.amount_interval['from'], ZKLendLiqConfig.amount_interval['to'])
-    zklend_liq = ZKLendLiquidity(private_key=private_key,
-                                 token=token,
-                                 amount_from=amount,
-                                 amount_to=amount)
+    zklend_liq = ZKLendLiquidity()
+    await zklend_liq.initialize(
+        private_key=private_key,
+        token=token,
+        amount_interval=ZKLendLiqConfig.amount_interval,
+        min_amount_interval=ZKLendLiqConfig.min_amount_interval
+    )
     logger.info('Adding liquidity on ZkLend...')
     await zklend_liq.add_liquidity()
 

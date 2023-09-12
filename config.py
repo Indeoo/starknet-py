@@ -22,12 +22,12 @@ orbiter_bridging = False
 
 # --- Swaps --- #
 
-jediswap_swap = True
+jediswap_swap = False
 myswap_swap = False
-k10_swap = True
-sith_swap = True
-anvu_swap = True
-fibrous_swap = True
+k10_swap = False
+sith_swap = False
+anvu_swap = False
+fibrous_swap = False
 
 # --- Liquidity --- #
 
@@ -44,7 +44,7 @@ k10_liq = False
 k10_liq_remove = False
 
 zklend_liq = True
-zklend_liq_remove = True
+zklend_liq_remove = False
 
 
 # --- NFT --- #
@@ -226,7 +226,9 @@ class K10LiqRemoveConfig:
 
 class ZKLendLiqConfig:
     token = 'ETH'  # USDC
-    amount_interval = {'from': 0.0001, 'to': 0.0003}
+    amount_interval = 'all_balance'
+    #amount_interval = {'from': 0.0001, 'to': 0.0003}
+    min_amount_interval = {'from': 0.0025, 'to': 0.0025} # for all_balance
 
 
 class ZKLendLiqRemoveConfig:

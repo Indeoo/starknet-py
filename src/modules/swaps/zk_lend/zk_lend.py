@@ -1,3 +1,4 @@
+import asyncio
 from asyncio import sleep
 import random
 import re
@@ -13,6 +14,7 @@ from starknet_py.net.signer.stark_curve_signer import (
     StarkCurveSigner,
     KeyPair,
 )
+from web3 import Web3
 
 from src.modules.swaps.utils.tokens import tokens
 
@@ -37,7 +39,13 @@ from src.utils.transaction_data import (
 
 
 class ZKLendLiquidity:
-    def __init__(self, private_key: str, token: str, amount_from: float, amount_to: float) -> None:
+    def __init__(self) -> None:
+        self.private_key = None
+        self.token = None
+        self.amount_interval = None
+        self.min_amount_interval = None
+
+    async def initialize(self, private_key: str, token: str, amount_interval, min_amount_interval):
         self.private_key = private_key
         private_key = re.sub(r'[^0-9a-fA-F]+', '', private_key)
         private_key = int(private_key, 16)
@@ -62,7 +70,7 @@ class ZKLendLiquidity:
         address = compute_address(class_hash=proxy_class_hash,
                                   constructor_calldata=[implementation_class_hash, selector, len(calldata), *calldata],
                                   salt=key_pair.public_key)
-        self.account = Account(
+        account = Account(
             address=address,
             client=FullNodeClient(node_url=RPC_URL),
             signer=StarkCurveSigner(
@@ -71,8 +79,19 @@ class ZKLendLiquidity:
                 chain_id=StarknetChainId.MAINNET
             )
         )
+
+        if amount_interval == 'all_balance':
+
+            token_address = tokens[token.upper()]
+            balance = await get_balance(token_address, account)
+            amount = float(Web3().from_wei(balance, 'ether')) - round(
+                random.uniform(min_amount_interval['from'], min_amount_interval['to']), 6)
+        else:
+            amount = round(random.uniform(amount_interval['from'], amount_interval['to']), 6)
+
+        self.account = account
         self.token = token
-        self.amount = round(random.uniform(amount_from, amount_to), 6)
+        self.amount = amount
         self.contract_address = 0x4c0a5193d58f74fbace4b74dcf65481e734ed1714121bdc571da345540efa05
 
     async def add_liquidity(self) -> None:
