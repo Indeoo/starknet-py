@@ -1,3 +1,5 @@
+import random
+
 from loguru import logger
 
 from src.modules.swaps.anvuswap.anvuswap import AnvuSwap
@@ -319,7 +321,7 @@ async def process_k10_liq_remove(private_key: str) -> None:
 
 async def process_zklend_liq(private_key: str) -> None:
     token = ZKLendLiqConfig.token
-    amount = ZKLendLiqConfig.amount
+    amount = random.uniform(ZKLendLiqConfig.amount_interval['from'], ZKLendLiqConfig.amount_interval['to'])
     zklend_liq = ZKLendLiquidity(private_key=private_key,
                                  token=token,
                                  amount_from=amount,

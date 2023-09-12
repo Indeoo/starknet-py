@@ -6,7 +6,7 @@ NUM_THREADS = 1
 MIN_PAUSE = 1200
 MAX_PAUSE = 1800
 MAX_FEE_FOR_TRANSACTION = 0.00053  # ETH
-RPC_URL = 'https://alpha-mainnet.starknet.io'
+RPC_URL = 'https://starknet-mainnet.public.blastapi.io'
 WALLET_TYPE = 'argent'  # argent/braavos
 # -------------------------------------Modules--------------------------------#
 
@@ -43,8 +43,8 @@ sith_liq_remove = False
 k10_liq = False
 k10_liq_remove = False
 
-zklend_liq = False
-zklend_liq_remove = False
+zklend_liq = True
+zklend_liq_remove = True
 
 
 # --- NFT --- #
@@ -226,7 +226,7 @@ class K10LiqRemoveConfig:
 
 class ZKLendLiqConfig:
     token = 'ETH'  # USDC
-    amount = 2
+    amount_interval = {'from': 0.0001, 'to': 0.0003}
 
 
 class ZKLendLiqRemoveConfig:
