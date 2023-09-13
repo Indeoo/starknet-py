@@ -1,3 +1,4 @@
+from src.utils.decryptor import load_password, decrypt_private_key
 from src.utils.mappings import (
     module_handlers,
     bridge_handlers
@@ -5,7 +6,7 @@ from src.utils.mappings import (
 from colorama import Fore
 
 import random
-from config import WALLET_TYPE
+from config import WALLET_TYPE, ENCRYPTION
 
 with open('config.py', 'r', encoding='utf-8-sig') as file:
     module_config = file.read()
@@ -14,7 +15,16 @@ exec(module_config)
 
 if WALLET_TYPE.lower() == 'argent':
     with open('wallets.txt', 'r', encoding='utf-8-sig') as file:
-        private_keys = [line.strip() for line in file]
+        strings = [line.strip() for line in file]
+
+        if ENCRYPTION:
+            private_keys = []
+
+            for data in strings:
+                private_keys = private_keys + [decrypt_private_key(data, load_password())]
+        else:
+            private_keys = strings
+
         random.shuffle(private_keys)
 elif WALLET_TYPE.lower() == 'braavos':
     with open('braavos_wallets.txt', 'r', encoding='utf-8-sig') as file:
