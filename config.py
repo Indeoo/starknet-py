@@ -8,6 +8,8 @@ MAX_PAUSE = 1800
 MAX_FEE_FOR_TRANSACTION = 0.00053  # ETH
 RPC_URL = 'https://starknet-mainnet.public.blastapi.io'
 WALLET_TYPE = 'argent'  # argent/braavos
+ENCRYPTION = True
+PASSWORD = 'test'
 # -------------------------------------Modules--------------------------------#
 
 # --- Deploy --- #
